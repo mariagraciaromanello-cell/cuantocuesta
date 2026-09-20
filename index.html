@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>¿Cuánto me cuesta? | CHISPA</title>
+<meta name="description" content="Calculá cuánto te cuesta realmente hacer un producto, receta, trabajo o proyecto. Gratis y sin registrarte.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="¿Cuánto me cuesta? | CHISPA">
+<meta property="og:description" content="Calculá cuánto te cuesta realmente hacer un producto, receta, trabajo o proyecto. Gratis y sin registrarte.">
+<meta property="og:type" content="website">
+
+<!-- Favicon: chispa + calculadora en SVG, codificado inline -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='4' width='36' height='56' rx='8' fill='%23241B3A'/%3E%3Crect x='11' y='10' width='26' height='14' rx='3' fill='%23FFC93C'/%3E%3Ccircle cx='16' cy='34' r='3' fill='%23FF5B2E'/%3E%3Ccircle cx='24' cy='34' r='3' fill='%23FF5B2E'/%3E%3Ccircle cx='32' cy='34' r='3' fill='%23FF5B2E'/%3E%3Ccircle cx='16' cy='44' r='3' fill='%23FF5B2E'/%3E%3Ccircle cx='24' cy='44' r='3' fill='%23FF5B2E'/%3E%3Ccircle cx='32' cy='44' r='3' fill='%23FF5B2E'/%3E%3Cpath d='M46 6 L37 30 L45 30 L36 58 L58 26 L48 26 Z' fill='%23FF5B2E' stroke='%23241B3A' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ====== ENCABEZADO ====== -->
+  <header class="app-header">
+    <div class="brand">
+      <svg class="brand-logo" viewBox="0 0 64 64" role="img" aria-label="Logo ¿Cuánto me cuesta?">
+        <rect x="6" y="4" width="36" height="56" rx="8" fill="#241B3A"/>
+        <rect x="11" y="10" width="26" height="14" rx="3" fill="#FFC93C"/>
+        <circle cx="16" cy="34" r="3" fill="#FF5B2E"/>
+        <circle cx="24" cy="34" r="3" fill="#FF5B2E"/>
+        <circle cx="32" cy="34" r="3" fill="#FF5B2E"/>
+        <circle cx="16" cy="44" r="3" fill="#FF5B2E"/>
+        <circle cx="24" cy="44" r="3" fill="#FF5B2E"/>
+        <circle cx="32" cy="44" r="3" fill="#FF5B2E"/>
+        <path d="M46 6 L37 30 L45 30 L36 58 L58 26 L48 26 Z" fill="#FF5B2E" stroke="#241B3A" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-title">¿Cuánto me cuesta?</span>
+        <span class="brand-sub">Una miniapp de CHISPA ✨</span>
+      </div>
+    </div>
+    <nav class="app-nav" aria-label="Progreso del cálculo">
+      <ol class="steps" id="stepIndicator">
+        <li data-step="inicio" class="step-dot active">1</li>
+        <li data-step="producto" class="step-dot">2</li>
+        <li data-step="costos" class="step-dot">3</li>
+        <li data-step="cantidad" class="step-dot">4</li>
+        <li data-step="resultado" class="step-dot">5</li>
+      </ol>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ====== PANTALLA: INICIO ====== -->
+    <section class="screen active" id="screen-inicio" aria-labelledby="tituloInicio">
+      <div class="hero-card">
+        <h1 id="tituloInicio">🧮 ¿Cuánto me cuesta?</h1>
+        <p class="subtitle">Descubrí cuánto te cuesta realmente hacer lo que hacés.</p>
+        <p class="lead">Cargá lo que usás, cuánto pagaste y cuánto necesitás. La cuenta la hacemos nosotros.</p>
+        <button class="btn btn-primary btn-xl" id="btnEmpezar">Empezar a calcular</button>
+      </div>
+
+      <section class="historial" id="historialSection" hidden>
+        <h2>Mis últimos cálculos</h2>
+        <ul class="historial-lista" id="historialLista"></ul>
+      </section>
+    </section>
+
+    <!-- ====== PASO 1: PRODUCTO ====== -->
+    <section class="screen" id="screen-producto" aria-labelledby="tituloProducto">
+      <h2 id="tituloProducto">¿Qué vas a hacer?</h2>
+
+      <div class="categorias" id="categorias" role="group" aria-label="Categorías orientativas">
+        <button type="button" class="chip" data-cat="🍰 Comida">🍰 Comida</button>
+        <button type="button" class="chip" data-cat="🕯️ Artesanía">🕯️ Artesanía</button>
+        <button type="button" class="chip" data-cat="🎁 Regalo">🎁 Regalo</button>
+        <button type="button" class="chip" data-cat="🛠️ Trabajo">🛠️ Trabajo</button>
+        <button type="button" class="chip" data-cat="📦 Producto">📦 Producto</button>
+        <button type="button" class="chip" data-cat="✨ Otra cosa">✨ Otra cosa</button>
+      </div>
+
+      <div class="field">
+        <label for="inputProducto">¿Qué vas a calcular?</label>
+        <input type="text" id="inputProducto" placeholder="Ej: Torta de chocolate" maxlength="60" autocomplete="off">
+        <p class="error-msg" id="errorProducto" role="alert"></p>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-ghost" data-back="inicio">Volver</button>
+        <button class="btn btn-primary" id="btnContinuarProducto">Continuar</button>
+      </div>
+    </section>
+
+    <!-- ====== PASO 2: COSTOS ====== -->
+    <section class="screen" id="screen-costos" aria-labelledby="tituloCostos">
+      <h2 id="tituloCostos">¿Qué necesitás para <span id="nombreProductoCostos">esto</span>?</h2>
+      <p class="hint">Agregá cada ingrediente, material o insumo que usaste.</p>
+
+      <ul class="lista-costos" id="listaCostos"></ul>
+
+      <button class="btn btn-secondary btn-block" id="btnAgregarCosto">+ Agregar costo</button>
+
+      <section class="otros-gastos">
+        <h3>💸 Otros gastos</h3>
+        <p class="hint">Envase, gas, electricidad, transporte, mano de obra... lo que corresponda. No es obligatorio.</p>
+        <ul class="lista-otros" id="listaOtros"></ul>
+        <button class="btn btn-secondary btn-block" id="btnAgregarOtro">+ Agregar otro gasto</button>
+      </section>
+
+      <div class="nav-buttons">
+        <button class="btn btn-ghost" data-back="producto">Volver</button>
+        <button class="btn btn-primary" id="btnContinuarCostos">Continuar</button>
+      </div>
+    </section>
+
+    <!-- ====== PASO 3: CANTIDAD FINAL ====== -->
+    <section class="screen" id="screen-cantidad" aria-labelledby="tituloCantidad">
+      <h2 id="tituloCantidad">¿Cuántas unidades obtuviste?</h2>
+      <p class="hint">Si hiciste una sola cosa, no hace falta que completes esto.</p>
+
+      <div class="field">
+        <label for="inputUnidades">Cantidad de unidades</label>
+        <input type="number" id="inputUnidades" min="0" step="1" placeholder="Ej: 10" inputmode="numeric">
+        <p class="error-msg" id="errorUnidades" role="alert"></p>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-ghost" data-back="costos">Volver</button>
+        <button class="btn btn-primary" id="btnVerResultado">Ver resultado</button>
+      </div>
+    </section>
+
+    <!-- ====== RESULTADO ====== -->
+    <section class="screen" id="screen-resultado" aria-labelledby="tituloResultado">
+      <h2 id="tituloResultado">✨ Esto te cuesta</h2>
+
+      <div class="resultado-card">
+        <div class="resultado-principal">
+          <span class="resultado-label">Costo total</span>
+          <span class="resultado-valor" id="costoTotalValor">$0</span>
+        </div>
+        <div class="resultado-secundario" id="costoUnidadBloque" hidden>
+          <span class="resultado-label">Costo por unidad</span>
+          <span class="resultado-valor-chico" id="costoUnidadValor">$0</span>
+        </div>
+      </div>
+
+      <ul class="resumen-lista" id="resumenLista">
+        <li><span>Materiales</span><strong id="resumenMateriales">$0</strong></li>
+        <li><span>Otros gastos</span><strong id="resumenOtros">$0</strong></li>
+        <li class="resumen-total"><span>Total</span><strong id="resumenTotal">$0</strong></li>
+        <li id="resumenUnidadesFila" hidden><span>Cantidad de unidades</span><strong id="resumenUnidades">0</strong></li>
+      </ul>
+
+      <!-- ¿Cuánto cobrar? -->
+      <section class="cobrar-bloque" id="cobrarBloque">
+        <h3>¿Querés saber cuánto cobrar?</h3>
+        <div class="nav-buttons" id="cobrarPreguntaBotones">
+          <button class="btn btn-primary" id="btnCobrarSi">Sí, calcular</button>
+          <button class="btn btn-ghost" id="btnCobrarNo">No, gracias</button>
+        </div>
+
+        <div class="cobrar-panel" id="cobrarPanel" hidden>
+          <p class="hint">Elegí un margen sobre el costo:</p>
+          <div class="margenes" id="margenes" role="group" aria-label="Elegir margen">
+            <button type="button" class="chip chip-margen" data-margen="20">20%</button>
+            <button type="button" class="chip chip-margen" data-margen="30">30%</button>
+            <button type="button" class="chip chip-margen" data-margen="50">50%</button>
+            <button type="button" class="chip chip-margen" data-margen="70">70%</button>
+            <button type="button" class="chip chip-margen" data-margen="100">100%</button>
+            <button type="button" class="chip chip-margen" data-margen="personalizado">Personalizado</button>
+          </div>
+          <div class="field field-inline" id="margenPersonalizadoCampo" hidden>
+            <label for="inputMargenPersonalizado">Margen personalizado (%)</label>
+            <input type="number" id="inputMargenPersonalizado" min="0" step="1" placeholder="Ej: 45" inputmode="numeric">
+          </div>
+
+          <div class="margen-resultado" id="margenResultado" hidden>
+            <div class="margen-fila"><span>Costo</span><strong id="margenCosto">$0</strong></div>
+            <div class="margen-fila"><span>Ganancia</span><strong id="margenGanancia">$0</strong></div>
+            <div class="margen-fila margen-fila-destacada"><span>Precio sugerido</span><strong id="margenPrecioSugerido">$0</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Probar otro precio -->
+      <section class="probar-bloque">
+        <h3>¿Y si lo vendieras a...?</h3>
+        <div class="field field-inline">
+          <label for="inputPrecioProbar">Precio de venta</label>
+          <input type="number" id="inputPrecioProbar" min="0" step="1" placeholder="Ej: 2000" inputmode="numeric">
+        </div>
+        <div class="probar-resultado" id="probarResultado" hidden>
+          <div class="margen-fila"><span>Costo</span><strong id="probarCosto">$0</strong></div>
+          <div class="margen-fila"><span>Ganancia</span><strong id="probarGanancia">$0</strong></div>
+          <div class="margen-fila"><span>Recargo sobre costo</span><strong id="probarRecargo">0%</strong></div>
+        </div>
+      </section>
+
+      <div class="acciones-finales">
+        <button class="btn btn-secondary" id="btnCalcularOtra">🔄 Calcular otra cosa</button>
+        <button class="btn btn-secondary" id="btnCopiar">📋 Copiar resultado</button>
+        <button class="btn btn-secondary" id="btnCompartir">📤 Compartir</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <span>Una miniapp de CHISPA ✨ — Todo se guarda solo en tu navegador.</span>
+  </footer>
+</div>
+
+<!-- ====== MODAL: AGREGAR / EDITAR COSTO ====== -->
+<div class="modal-overlay" id="modalCosto" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalCosto">
+    <h3 id="tituloModalCosto">Agregar costo</h3>
+
+    <div class="field">
+      <label for="modalNombre">Nombre</label>
+      <input type="text" id="modalNombre" placeholder="Ej: Harina" maxlength="40">
+    </div>
+
+    <div class="field">
+      <label for="modalPrecio">Precio de compra</label>
+      <input type="number" id="modalPrecio" min="0" step="0.01" placeholder="Ej: 2000" inputmode="decimal">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="modalCantidadComprada">Cantidad comprada</label>
+        <input type="number" id="modalCantidadComprada" min="0" step="0.01" placeholder="Ej: 1000" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="modalUnidadComprada">Unidad de compra</label>
+        <select id="modalUnidadComprada">
+          <option value="gramos">Gramos</option>
+          <option value="kilogramos">Kilogramos</option>
+          <option value="mililitros">Mililitros</option>
+          <option value="litros">Litros</option>
+          <option value="unidades">Unidades</option>
+          <option value="metros">Metros</option>
+          <option value="horas">Horas</option>
+          <option value="otra">Otra</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="modalCantidadUsada">Cantidad utilizada</label>
+        <input type="number" id="modalCantidadUsada" min="0" step="0.01" placeholder="Ej: 300" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="modalUnidadUsada">Unidad utilizada</label>
+        <select id="modalUnidadUsada">
+          <option value="gramos">Gramos</option>
+          <option value="kilogramos">Kilogramos</option>
+          <option value="mililitros">Mililitros</option>
+          <option value="litros">Litros</option>
+          <option value="unidades">Unidades</option>
+          <option value="metros">Metros</option>
+          <option value="horas">Horas</option>
+          <option value="otra">Otra</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="error-msg" id="errorModalCosto" role="alert"></p>
+    <p class="preview-costo" id="previewCosto" hidden></p>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" id="btnCancelarModalCosto">Cancelar</button>
+      <button class="btn btn-primary" id="btnGuardarModalCosto">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== MODAL: OTRO GASTO ====== -->
+<div class="modal-overlay" id="modalOtro" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalOtro">
+    <h3 id="tituloModalOtro">Agregar otro gasto</h3>
+
+    <div class="field">
+      <label for="modalOtroNombre">Nombre</label>
+      <input type="text" id="modalOtroNombre" placeholder="Ej: Envase" maxlength="40">
+    </div>
+    <div class="field">
+      <label for="modalOtroImporte">Importe</label>
+      <input type="number" id="modalOtroImporte" min="0" step="0.01" placeholder="Ej: 300" inputmode="decimal">
+    </div>
+
+    <p class="error-msg" id="errorModalOtro" role="alert"></p>
+
+    <div class="nav-buttons">
+      <button class="btn btn-ghost" id="btnCancelarModalOtro">Cancelar</button>
+      <button class="btn btn-primary" id="btnGuardarModalOtro">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====== TOAST ====== -->
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="script.js"></script>
+</body>
+</html>

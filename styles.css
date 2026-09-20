@@ -1,0 +1,717 @@
+/* =========================================================
+   ¿CUÁNTO ME CUESTA? — CHISPA
+   Tokens: fondo cálido, tinta violeta oscura, acento naranja
+   "chispa" y verde para todo lo que es plata/resultado.
+   ========================================================= */
+
+:root {
+  --bg: #FFF7ED;
+  --bg-soft: #FFEFDD;
+  --ink: #241B3A;
+  --ink-soft: #5B5470;
+  --violet: #4B3F72;
+  --violet-deep: #241B3A;
+  --spark: #FF5B2E;
+  --spark-dark: #E14A20;
+  --gold: #FFC93C;
+  --money: #1F9D66;
+  --money-soft: #E4F6EE;
+  --danger: #E4483C;
+  --danger-soft: #FDE7E5;
+  --card: #FFFFFF;
+  --border: #EBDFCB;
+  --radius-card: 20px;
+  --radius-btn: 14px;
+  --radius-chip: 999px;
+  --shadow-card: 0 10px 30px -12px rgba(36, 27, 58, 0.18);
+  --shadow-pop: 0 18px 40px -14px rgba(36, 27, 58, 0.28);
+  --focus-ring: 0 0 0 3px rgba(255, 91, 46, 0.45);
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.5;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--violet-deep);
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+h1 { font-size: 1.9rem; font-weight: 800; }
+h2 { font-size: 1.4rem; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+
+p { margin: 0 0 12px 0; }
+
+button {
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+}
+
+a { color: var(--spark); }
+
+/* ---------- layout ---------- */
+
+.app-shell {
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 18px 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brand-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--violet-deep);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-sub {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.app-nav {
+  margin-top: 12px;
+}
+
+.steps {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.step-dot {
+  flex: 1;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--border);
+  color: transparent;
+  font-size: 0;
+  transition: background 0.25s ease;
+}
+
+.step-dot.active,
+.step-dot.done {
+  background: var(--spark);
+}
+
+main {
+  flex: 1;
+  padding: 20px 18px 40px;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 18px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- pantallas ---------- */
+
+.screen {
+  display: none;
+  animation: entrar 0.28s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen { animation: none; }
+}
+
+/* ---------- hero ---------- */
+
+.hero-card {
+  background: linear-gradient(155deg, var(--violet-deep) 0%, var(--violet) 65%, var(--spark-dark) 130%);
+  border-radius: var(--radius-card);
+  padding: 32px 22px;
+  color: #FFF6EA;
+  text-align: left;
+  box-shadow: var(--shadow-pop);
+}
+
+.hero-card h1 {
+  color: #FFF6EA;
+  font-size: 1.7rem;
+}
+
+.hero-card .subtitle {
+  font-weight: 800;
+  color: var(--gold);
+  font-size: 1.05rem;
+}
+
+.hero-card .lead {
+  color: #E7E1F5;
+  font-size: 0.98rem;
+}
+
+.historial {
+  margin-top: 26px;
+}
+
+.historial-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.historial-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.historial-info {
+  min-width: 0;
+}
+
+.historial-nombre {
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.historial-detalle {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.historial-acciones {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ---------- botones ---------- */
+
+.btn {
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 13px 20px;
+  font-weight: 800;
+  font-size: 0.98rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn-primary {
+  background: var(--spark);
+  color: #FFF9F2;
+  box-shadow: 0 10px 22px -8px rgba(255, 91, 46, 0.55);
+}
+
+.btn-primary:hover { background: var(--spark-dark); }
+
+.btn-xl {
+  width: 100%;
+  padding: 17px 20px;
+  font-size: 1.08rem;
+  margin-top: 22px;
+  border-radius: 16px;
+}
+
+.btn-secondary {
+  background: var(--violet-deep);
+  color: #FFF6EA;
+}
+
+.btn-secondary:hover { background: #382a56; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--violet);
+  border: 2px solid var(--border);
+}
+
+.btn-ghost:hover { border-color: var(--violet); }
+
+.btn-block {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.btn-small {
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  border-radius: 10px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.nav-buttons .btn { flex: 1; }
+
+.acciones-finales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.acciones-finales .btn { flex: 1 1 30%; }
+
+/* ---------- categorías / chips ---------- */
+
+.categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.chip {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-chip);
+  padding: 9px 16px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.chip:hover { border-color: var(--spark); }
+
+.chip.selected {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--violet-deep);
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.chip-margen.selected {
+  background: var(--spark);
+  border-color: var(--spark);
+  color: #FFF9F2;
+}
+
+.margenes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+/* ---------- campos ---------- */
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field-inline { margin-bottom: 14px; }
+
+.field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.field-row .field { flex: 1; min-width: 0; }
+
+label {
+  display: block;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--violet);
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 13px 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--card);
+  min-height: 48px;
+}
+
+input:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: var(--spark);
+  box-shadow: var(--focus-ring);
+}
+
+input::placeholder { color: #B7AECF; font-weight: 600; }
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-top: -8px;
+}
+
+.error-msg {
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 0.83rem;
+  margin: 6px 0 0;
+  min-height: 1em;
+}
+
+/* ---------- listas de costos ---------- */
+
+.lista-costos, .lista-otros {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.costo-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.costo-info { min-width: 0; }
+
+.costo-nombre {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.98rem;
+  display: block;
+}
+
+.costo-detalle {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  display: block;
+  margin-top: 2px;
+}
+
+.costo-valor {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  color: var(--money);
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.costo-acciones {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  background: var(--bg-soft);
+  border: none;
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-btn:hover { background: var(--border); }
+
+.icon-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.icon-btn.danger { color: var(--danger); }
+
+.vacio-lista {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  padding: 18px 10px;
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+}
+
+.otros-gastos {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- resultado ---------- */
+
+.resultado-card {
+  background: linear-gradient(155deg, var(--violet-deep), var(--violet));
+  border-radius: var(--radius-card);
+  padding: 26px 22px;
+  color: #FFF6EA;
+  box-shadow: var(--shadow-pop);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.resultado-principal, .resultado-secundario {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resultado-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.resultado-valor {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 2.4rem;
+  letter-spacing: -0.02em;
+}
+
+.resultado-valor-chico {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+
+.resumen-lista {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.resumen-lista li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.resumen-lista li:last-child { border-bottom: none; }
+
+.resumen-lista li span { color: var(--ink-soft); font-weight: 700; }
+.resumen-lista li strong { font-family: 'Poppins', sans-serif; }
+
+.resumen-total {
+  background: var(--money-soft);
+}
+
+.resumen-total strong { color: var(--money); font-size: 1.05rem; }
+
+/* ---------- cobrar / margen ---------- */
+
+.cobrar-bloque, .probar-bloque {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+.cobrar-panel {
+  margin-top: 14px;
+}
+
+.margen-resultado, .probar-resultado {
+  margin-top: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.margen-fila {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.margen-fila:last-child { border-bottom: none; }
+.margen-fila span { color: var(--ink-soft); font-weight: 700; }
+.margen-fila strong { font-family: 'Poppins', sans-serif; }
+
+.margen-fila-destacada {
+  background: #FFF3E0;
+}
+
+.margen-fila-destacada strong { color: var(--spark-dark); font-size: 1.05rem; }
+
+#probarGanancia.negativo { color: var(--danger); }
+
+/* ---------- modal ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(36, 27, 58, 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 100;
+  padding: 0;
+}
+
+@media (min-width: 560px) {
+  .modal-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+.modal {
+  background: var(--bg);
+  width: 100%;
+  max-width: 480px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 22px 22px 0 0;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+  box-shadow: var(--shadow-pop);
+}
+
+@media (min-width: 560px) {
+  .modal { border-radius: 20px; }
+}
+
+.preview-costo {
+  background: var(--money-soft);
+  color: var(--money);
+  font-weight: 800;
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+/* ---------- toast ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  background: var(--violet-deep);
+  color: #FFF6EA;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-pop);
+  z-index: 200;
+  max-width: 90vw;
+  text-align: center;
+}
+
+/* ---------- utilidades responsivas ---------- */
+
+@media (min-width: 600px) {
+  main { padding: 32px 30px 50px; }
+  .app-header { padding: 18px 30px 14px; }
+  .hero-card { padding: 44px 36px; }
+  h1 { font-size: 2.1rem; }
+}
+
+/* ---------- accesibilidad: foco visible general ---------- */
+
+:focus-visible {
+  outline: none;
+}
+
+/* modo oscuro respetado a nivel de color-scheme, sin cambiar paleta cálida */
+:root { color-scheme: light; }
