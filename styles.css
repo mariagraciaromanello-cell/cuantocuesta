@@ -679,6 +679,54 @@ input::placeholder { color: #B7AECF; font-weight: 600; }
   margin-bottom: 8px;
 }
 
+/* ---------- pantalla de carga ---------- */
+
+.pantalla-carga {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.pantalla-carga span {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: var(--violet-deep);
+  font-size: 0.95rem;
+}
+
+.pantalla-carga .carga-logo {
+  width: 48px;
+  height: 48px;
+  animation: girar-carga 0.9s linear infinite;
+}
+
+@keyframes girar-carga {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pantalla-carga .carga-logo { animation: none; }
+}
+
+/* ---------- aviso de error de inicialización ---------- */
+
+.aviso-init-error {
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+}
+
 /* ---------- toast ---------- */
 
 .toast {

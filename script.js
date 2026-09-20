@@ -9,24 +9,81 @@
   'use strict';
 
   /* ---------------------------------------------------------
+     -1. Red de seguridad para la pantalla de carga.
+     Esto va ANTES de todo lo demás y fuera de cualquier bloque
+     que pueda fallar, para garantizar que la pantalla de carga
+     nunca quede trabada, pase lo que pase con el resto del código.
+     --------------------------------------------------------- */
+
+  function ocultarPantallaCarga() {
+    var pantalla = document.getElementById('pantallaCarga');
+    if (pantalla) pantalla.hidden = true;
+  }
+
+  function mostrarAvisoInicioFallido() {
+    try {
+      var main = document.getElementById('main');
+      if (main && !document.getElementById('avisoInitError')) {
+        var aviso = document.createElement('div');
+        aviso.id = 'avisoInitError';
+        aviso.className = 'aviso-init-error';
+        aviso.textContent = 'Hubo un problema al iniciar la aplicación. Recargá la página; tus cálculos guardados no se pierden.';
+        main.insertBefore(aviso, main.firstChild);
+      }
+    } catch (e2) {
+      /* si ni esto funciona, no hay nada más que hacer */
+    }
+  }
+
+  // Si algo explota en cualquier parte del script, esto asegura que
+  // la pantalla de carga desaparezca igual (nunca debe depender de
+  // que TODO el código se ejecute sin errores).
+  window.addEventListener('error', ocultarPantallaCarga);
+
+  // Seguro absoluto: pase lo que pase, a los 3 segundos la pantalla
+  // de carga se oculta sí o sí.
+  setTimeout(ocultarPantallaCarga, 3000);
+
+  try {
+
+  /* ---------------------------------------------------------
      0. Constantes y utilidades
      --------------------------------------------------------- */
 
   var STORAGE_KEY = 'chispa_cuanto_me_cuesta_v1';
   var MAX_HISTORIAL = 12;
 
-  var fmtMoneda = new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    maximumFractionDigits: 2
-  });
+  var fmtMoneda;
+  try {
+    fmtMoneda = new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      maximumFractionDigits: 2
+    });
+  } catch (errorIntl) {
+    // Si el navegador no soporta Intl.NumberFormat con ARS,
+    // usamos un formateador propio bien simple como respaldo.
+    fmtMoneda = null;
+  }
 
   function formatearMoneda(numero) {
     if (!isFinite(numero)) return '$0';
     // Evitar mostrar -0
     var valor = Math.round((numero + Number.EPSILON) * 100) / 100;
     if (Object.is(valor, -0)) valor = 0;
-    return fmtMoneda.format(valor);
+
+    if (fmtMoneda) {
+      try {
+        return fmtMoneda.format(valor);
+      } catch (errorFormato) {
+        // seguimos al respaldo de abajo
+      }
+    }
+
+    // Respaldo manual si Intl.NumberFormat no está disponible o falla.
+    var partes = Math.abs(valor).toFixed(2).split('.');
+    var entero = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return (valor < 0 ? '-$' : '$') + entero + ',' + partes[1];
   }
 
   function formatearPorcentaje(numero) {
@@ -589,7 +646,7 @@
     }
 
     calcularYMostrarResultado();
-    guardarCalculoEnHistorial();
+    document.getElementById('errorGuardarCalculo').textContent = '';
     irAPantalla('resultado');
   });
 
@@ -645,6 +702,7 @@
     document.getElementById('inputMargenPersonalizado').value = '';
     document.getElementById('inputPrecioProbar').value = '';
     document.getElementById('probarResultado').hidden = true;
+    document.getElementById('errorGuardarCalculo').textContent = '';
   }
 
   // Costo de referencia para "cuánto cobrar": por unidad si existe, si no el total.
@@ -655,6 +713,8 @@
     }
     return total;
   }
+
+  document.getElementById('btnGuardarCalculo').addEventListener('click', guardarCalculoActual);
 
   document.getElementById('btnCobrarSi').addEventListener('click', function () {
     document.getElementById('cobrarPreguntaBotones').hidden = true;
@@ -861,10 +921,38 @@
     historial.unshift(registro);
     if (historial.length > MAX_HISTORIAL) historial = historial.slice(0, MAX_HISTORIAL);
 
-    var guardado = guardarHistorial(historial);
-    if (!guardado) {
-      mostrarToast('No se pudo guardar el cálculo en este navegador.');
+    return guardarHistorial(historial);
+  }
+
+  function guardarCalculoActual() {
+    var errorEl = document.getElementById('errorGuardarCalculo');
+    errorEl.textContent = '';
+
+    // 1. Validar los datos antes de guardar.
+    if (state.costos.length === 0 && state.otros.length === 0) {
+      errorEl.textContent = 'No hay nada para guardar todavía. Agregá al menos un costo.';
+      return;
     }
+
+    // 2, 3. Crear el objeto del cálculo y guardarlo mediante localStorage.
+    var guardadoOk;
+    try {
+      guardadoOk = guardarCalculoEnHistorial();
+    } catch (errorGuardado) {
+      guardadoOk = false;
+      if (window.console && console.error) console.error('Error al guardar el cálculo:', errorGuardado);
+    }
+
+    if (!guardadoOk) {
+      errorEl.textContent = 'No se pudo guardar. Es posible que tu navegador tenga el almacenamiento lleno o bloqueado.';
+      return;
+    }
+
+    // 4. Actualizar la lista de cálculos guardados.
+    renderHistorial();
+
+    // 5. Mostrar una confirmación visible.
+    mostrarToast('✓ Cálculo guardado');
   }
 
   function renderHistorial() {
@@ -983,8 +1071,18 @@
     renderListaOtros();
     renderHistorial();
     irAPantalla('inicio');
+    ocultarPantallaCarga();
   }
 
   iniciar();
+
+  } catch (errorFatal) {
+    // Red de seguridad final: si algo de todo lo anterior falla,
+    // la app nunca debe quedar trabada en la pantalla de carga ni
+    // en silencio total. Mostramos un aviso claro y liberamos la UI.
+    ocultarPantallaCarga();
+    mostrarAvisoInicioFallido();
+    if (window.console && console.error) console.error('Error al iniciar ¿Cuánto me cuesta?:', errorFatal);
+  }
 
 })();

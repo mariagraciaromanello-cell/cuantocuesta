@@ -22,6 +22,23 @@
 </head>
 <body>
 
+<!-- Pantalla de carga: se oculta desde script.js apenas la app termina
+     de inicializarse (o si algo falla, para no quedar trabada nunca). -->
+<div id="pantallaCarga" class="pantalla-carga" role="status" aria-live="polite">
+  <svg class="carga-logo" viewBox="0 0 64 64" aria-hidden="true">
+    <rect x="6" y="4" width="36" height="56" rx="8" fill="#241B3A"/>
+    <rect x="11" y="10" width="26" height="14" rx="3" fill="#FFC93C"/>
+    <circle cx="16" cy="34" r="3" fill="#FF5B2E"/>
+    <circle cx="24" cy="34" r="3" fill="#FF5B2E"/>
+    <circle cx="32" cy="34" r="3" fill="#FF5B2E"/>
+    <circle cx="16" cy="44" r="3" fill="#FF5B2E"/>
+    <circle cx="24" cy="44" r="3" fill="#FF5B2E"/>
+    <circle cx="32" cy="44" r="3" fill="#FF5B2E"/>
+    <path d="M46 6 L37 30 L45 30 L36 58 L58 26 L48 26 Z" fill="#FF5B2E" stroke="#241B3A" stroke-width="2" stroke-linejoin="round"/>
+  </svg>
+  <span>Cargando…</span>
+</div>
+
 <div class="app-shell">
 
   <!-- ====== ENCABEZADO ====== -->
@@ -156,6 +173,9 @@
         <li class="resumen-total"><span>Total</span><strong id="resumenTotal">$0</strong></li>
         <li id="resumenUnidadesFila" hidden><span>Cantidad de unidades</span><strong id="resumenUnidades">0</strong></li>
       </ul>
+
+      <button class="btn btn-primary btn-block" id="btnGuardarCalculo">💾 Guardar cálculo</button>
+      <p class="error-msg" id="errorGuardarCalculo" role="alert"></p>
 
       <!-- ¿Cuánto cobrar? -->
       <section class="cobrar-bloque" id="cobrarBloque">
